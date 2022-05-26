@@ -10,7 +10,7 @@ const nextWeek = new Date(today.getTime() + 7 * 24 * 60 * 60 * 1000);
 // console.log(nextWeek);
 let day = ("0" + nextWeek).slice(9, 11);
 // console.log(day);
-let month = ("0" + (today.getMonth() + 1)).slice(-2);
+let month = ("0" + (nextWeek.getMonth() + 1)).slice(-2);
 let year = today.getFullYear();
 // console.log(month);
 // console.log(year);
@@ -34,33 +34,33 @@ function btnAction(e) {
   if (description === "creer") {
     creerCookie(nvObj.cookieName, nvObj.cookieValue, nvObj.cookieExpire);
   } else if (description === 'toutAfficher'){
-    listeCookie();
+    listeCookies();
   }
 }
 
 function creerCookie(name, value, exp){
 
   infoTxt.innerText = "";
+  affichage.innerHTML ="";
 
   // Si le cookie a un même nom
   let cookies = document.cookie.split(";");
-  cookies.forEach( cookie => {
-
+  cookies.forEach(cookie => {
+    
     cookie = cookie.trim();
-    console.log(cookie);
-     let formatCookie = cookie.split('=');
-     console.log(formatCookie);
-     if(formatCookie[0] = encodeURIComponent(name)){
-       dejaFait = true;
-     }
-   })
-  
-  if(dejaFait) {
+    // console.log(cookie);
+    let formatCookie = cookie.split("=");
+    // console.log(formatCookie);
+    if(formatCookie[0] === encodeURIComponent(name)) {
+      dejaFait = true;
+    }
+  })
+
+  if(dejaFait){
     infoTxt.innerText = "Un cookie possède déjà ce nom.";
     dejaFait = false;
     return;
   }
-
 
   // Si le cookie n'a pas de nom
   if(name.length === 0) {
@@ -77,7 +77,7 @@ function creerCookie(name, value, exp){
   }, 1500)
 }
 
-function listeCookie(){
+function listeCookies(){
 
   let cookies = document.cookie.split(";");
 
@@ -103,7 +103,7 @@ function listeCookie(){
       item.innerText = `Cookie ${formatCookie[0]} supprimé`;
       setTimeout(() => {
         item.remove();       
-      }, 1500)
+      }, 1000)
     });
   })
 }
