@@ -4,6 +4,7 @@ const btns = document.querySelectorAll('button');
 const fond = document.body;
 const containerCouleur = document.querySelector('.container-couleur');
 const span = document.querySelector('span');
+const btnRandom = document.querySelector('.random');
 
 // Initialisation
 let valCouleur =['#BA5370', '#F4E2D8'];
@@ -34,7 +35,6 @@ function rajouteEnleve(e){
 
   span.innerText = "";
   const allInputs = document.querySelectorAll('.inp-couleur');
-  console.log(allInputs);
   const randomColor = Math.floor(Math.random()*16777215).toString(16);
   // console.log(randomColor);
 
@@ -45,7 +45,7 @@ function rajouteEnleve(e){
     }
 
     const nvCouleur = document.createElement('input');
-    nvCouleur.setAttribute('class', '.inp-couleur');
+    nvCouleur.setAttribute('class', 'inp-couleur');
     nvCouleur.setAttribute('data-index', index);
     nvCouleur.setAttribute('maxlength', 7);
     nvCouleur.value = `#${randomColor.toUpperCase()}`;
@@ -69,8 +69,40 @@ function rajouteEnleve(e){
       allInputs[allInputs.length-1].remove();
        // MAJ fond
       fond.style.background = `linear-gradient(${inclinaison}deg, ${valCouleur})`;
-
+      index--;
     }
   }
-
+  
+  //MAJ inputs
+  allInputs.forEach(inp => {
+    inp.addEventListener('input', MAJColors);
+  });  
 }
+
+// MAJ inputs de base
+inputsCouleur.forEach(inp => {
+  inp.addEventListener('input', MAJColors)
+})
+function MAJColors(e){
+
+  let indexEnCours = e.target.getAttribute('data-index');
+  e.target.value = e.target.value.toUpperCase();
+  valCouleur[indexEnCours - 1] = e.target.value.toUpperCase();
+  e.target.style.background = valCouleur[indexEnCours - 1];
+  fond.style.background = `linear-gradient(${inclinaison}deg, ${valCouleur})`;
+}
+
+//Couleurs aléatoires
+
+btnRandom.addEventListener('click', (e) => {
+
+  const inputs = document.querySelectorAll('.inp-couleur');
+
+  for(i = 0; i < valCouleur.length; i++) {
+    valCouleur[i] = `#${Math.floor(Math.random()*16777215).toString(16)}`;
+    inputs[i].value = valCouleur[i].toUpperCase();
+    inputs[i].style.background = valCouleur[i].toUpperCase();
+    fond.style.background = `linear-gradient(${inclinaison}deg, ${valCouleur})`;
+  }
+
+})
