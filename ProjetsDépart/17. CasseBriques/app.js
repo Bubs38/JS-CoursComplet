@@ -14,6 +14,7 @@ hauteurBrique = 20;
 let x = canvas.width/2;
 let y = canvas.height -30;
 let barreX = (canvas.width - barreWidth)/2;
+let score = 0;
 
 let fin = false;
 let vitesseX = 5;
@@ -64,7 +65,7 @@ function dessineBriques(){
         let briqueY = (i * (hauteurBrique +10) + 30);
 
         briques[i][j].x = briqueX;
-        briques[i][j].Y = briqueY;
+        briques[i][j].y = briqueY;
 
         ctx.beginPath();
         ctx.rect(briqueX, briqueY, largeurBrique, hauteurBrique);
@@ -85,6 +86,7 @@ function dessine() {
     dessineBriques();
     dessineBalle();
     dessineBarre();
+    collisionDetection();
 
     if(x + vitesseX > canvas.width - rayonBalle || x + vitesseX < rayonBalle) {
       vitesseX = -vitesseX;
@@ -114,6 +116,58 @@ function dessine() {
 
 }
 dessine();
+
+
+function collisionDetection() {
+
+  for(let i = 0; i < nbRow; i++) {
+    for(let j = 0; j < nbCol; j++) {
+
+      let b = briques[i][j];
+      if (b.statut === 1) {
+        if(x > b.x && x < b.x + largeurBrique && y > b.y && y < b.y + hauteurBrique) {
+          vitesseY = - vitesseY;
+          b.statut = 0;
+
+          score++;
+          affichageScore.innerHTML = `Score : ${score}`;
+
+          if (score === nbCol * nbRow) {
+            affichageScore.innerHTML = `Bravo c'est gagné ! <br> Clique sur le casse-brique pour recommencer.`
+            fin = true;
+          }
+        }
+      }
+
+    }
+  }
+
+}
+
+
+
+
+// Mouvement de la barre
+
+document.addEventListener('mousemove', mouvementSouris);
+
+function mouvementSouris(e) {
+
+  let posXBarreCanvas = e.clientX - canvas.offsetLeft;
+  // e.clientX = de la gauche jusqu'à la souris
+  // canvas.offsetLeft = décalage par rapport à la gauche 
+  // console.log(posXBarreCanvas);
+
+  if(posXBarreCanvas > 35 && posXBarreCanvas < canvas.width - 35){
+    barreX = posXBarreCanvas - barreWidth / 2;
+  }
+
+}
+
+
+
+
+
 
 
 //Recommencer
